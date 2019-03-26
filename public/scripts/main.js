@@ -1,6 +1,18 @@
+let readData = firebase.database().ref('tables/');
+
+readData.on('value', function (snap) {
+    for (let key in snap.val()){
+        console.log(key);
+    }
+}, function (error) {
+    console.log("error " + error.code);
+})
+
+
+
+
 function createPlayer() {
     localStorage.clear();
-    // let name = document.getElementById('login').value;
     let player = {
         name: document.getElementById('login').value,
         weapon: undefined
