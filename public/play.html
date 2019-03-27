@@ -10,18 +10,50 @@
 </head>
 <body onload="battle()">
 
-<!-- Modal -->
+<!-- Waiting for opponent -->
 <div class="modal fade" data-backdrop="static" data-keyboard="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog"  role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
             </div>
             <div class="modal-body">
-                TEXT ON
+                Waiting for opponent...
             </div>
             <div class="modal-footer">
 
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Win/Lose Message -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#endGameModal">
+    Launch demo modal
+</button>
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="endGameModal" tabindex="-1" role="dialog" aria-labelledby="endGameModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="endGameModalLabel">You win</h5>
+            </div>
+            <div class="modal-body">
+                <h6>Congratulations, you win the match!</h6>
+            </div>
+            <div class="modal-footer">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <p>Would you like to play again?</p>
+                    </div>
+                    <div class="row justify-content-around">
+                        <div class="col-4 text-center">
+                            <button type="button" class="btn btn-primary continue-playing" data-dismiss="modal">YES!</button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button type="button" class="btn btn-primary stop-playing" data-dismiss="modal">NO :(</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -84,7 +116,7 @@
     };
     firebase.initializeApp(config);
 </script>
-<script type="text/javascript" src="scripts/main.js"></script>
-<script src="scripts/GamePreparation.js"></script>
-<script src="scripts/SendChoice.js"></script>
+<!--<script type="text/javascript" src="scripts/main.js"></script>-->
+<!--<script src="scripts/GamePreparation.js"></script>-->
+<!--<script src="scripts/SendChoice.js"></script>-->
 </html>
