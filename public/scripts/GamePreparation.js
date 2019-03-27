@@ -36,7 +36,7 @@ function getAvailableTable(getSeat) {
 }
 
 function createNewTable() {
-    return firebase.database().ref("/tables").push().then(
+    return firebase.database().ref("/tables").push({"score1":0, "score2":0}).then(
         function (ref) {
             return ref.key;
         }
