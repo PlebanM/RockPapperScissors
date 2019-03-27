@@ -1,29 +1,52 @@
-let readData = firebase.database().ref('tables/');
-
+let readData = firebase.database().ref('players/');
+var users = [];
 readData.on('value', function (snap) {
     for (let key in snap.val()){
         console.log(key);
+        users.push(key);
     }
 }, function (error) {
     console.log("error " + error.code);
 })
 
 
+function addActualPlayer(login) {
+    let update = {};
+    update['players/'+ login] = {'score': 0, 'table':'uashdiuhasduuuu'};
+    return firebase.database().ref().update(update);
+}
 
 
-function createPlayer() {
+function checkIfPlayerExist(login){
+
+
+    let isInDB = users.includes(login);
+    console.log(users);
+
+    if (isInDB){
+        document.getElementById("login").classList.add("form-control","is-invalid");
+
+    }else {
+        document.getElementById("login").classList.remove("form-control","is-invalid");
+        createPlayer(login);
+        addActualPlayer(login);
+        window.location.href = "play.html";
+        document.getElementById("redirectFromLogin").setAttribute('action', 'play.html');
+    }
+
+    }
+
+function createPlayer(userName) {
     localStorage.clear();
     let player = {
-        name: document.getElementById('login').value,
+        name: userName,
         weapon: undefined
     };
-    console.log(player.name);
     localStorage.setItem('userData', JSON.stringify(player));
 }
 
 function showUserName() {
     let storageData = JSON.parse(localStorage.getItem('userData'));
-    console.log(storageData);
     document.getElementById('showName').innerHTML += storageData['name'];
 }
 

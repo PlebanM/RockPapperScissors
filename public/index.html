@@ -19,9 +19,13 @@
         </div>
 
         <!-- Login Form -->
-        <form action="play.html">
-            <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-            <input type="submit" class="fadeIn fourth" value="Log In" onclick="createPlayer()">
+        <!--<form action="play.html">-->
+        <form id="redirectFromLogin">
+            <input type="text" id="login" class="fadeIn second" name="login" placeholder="login"><div class="invalid-feedback">
+            Please choose different login.
+        </div>
+            <input type="button" class="fadeIn fourth" value="Log In" onclick="checkIfPlayerExist(document.getElementById('login').value)">
+
         </form>
 
     </div>
