@@ -5,15 +5,16 @@ function getSeat(tableId, isSecondPlayer) {
     firebase.database().ref("players/" + id + "/table").set(tableId);
     let tablePlayer;
     if (isSecondPlayer) {
-        tablePlayer = "/player2";
+        tablePlayer = "player2";
     } else {
-        tablePlayer = "/player1";
+        tablePlayer = "player1";
     }
-    firebase.database().ref("/tables/" + tableId + tablePlayer).set(id).then(
+    firebase.database().ref("/tables/" + tableId + "/" + tablePlayer).set(id).then(
         function () {
             waitForGameStart(tableId);
         }
     );
+    saveTableInfoToLocal(tableId, tablePlayer);
 }
 
 function getAvailableTable(getSeat) {
@@ -54,6 +55,11 @@ function waitForGameStart(tableId) {
             firebase.database().ref("tables/" + tableId).off(); //do we need to specify?
         }
     })
+}
+
+function saveTableInfoToLocal(tableId, player) {
+    localStorage.removeItem("tableData");
+    localStorage.setItem("tableData", JSON.stringify({"tableId":tableId, "player":player}));
 }
 
 getAvailableTable(getSeat);

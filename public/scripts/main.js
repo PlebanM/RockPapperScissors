@@ -49,11 +49,3 @@ function showUserName() {
     let storageData = JSON.parse(localStorage.getItem('userData'));
     document.getElementById('showName').innerHTML += storageData['name'];
 }
-
-function addWeapon(weapon) {
-    let player = JSON.parse(localStorage.getItem('userData'));
-    player["weapon"]=weapon;
-    console.log(player.weapon);
-    localStorage.setItem('userData', JSON.stringify(player));
-
-}
