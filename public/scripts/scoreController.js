@@ -31,10 +31,20 @@ function handleWinPlayer1() {
     console.log("player1 win!!")
 }
 
+function handleWinPlayer2() {
+    console.log("player2 win!!")
+}
+
 function addScoreEventHandlers() {
 
     let myTable = JSON.parse(localStorage.getItem('tableData'))["tableId"];
+
     firebase.database().ref("tables/" + myTable + "/score1").on("value", function (snap) {
             if (snap.val() === 3) handleWinPlayer1();
     })
+
+    firebase.database().ref("tables/" + myTable + "/score2").on("value", function (snap) {
+            if (snap.val() === 3) handleWinPlayer2();
+    })
+
 }
