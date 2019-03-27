@@ -2,7 +2,6 @@ let readData = firebase.database().ref('players/');
 var users = [];
 readData.on('value', function (snap) {
     for (let key in snap.val()){
-        console.log(key);
         users.push(key);
     }
 }, function (error) {
