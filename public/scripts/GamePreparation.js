@@ -1,4 +1,5 @@
 
+
 function getSeat(tableId, isSecondPlayer) {
     let id = JSON.parse(localStorage.getItem("userData"))["name"];
     firebase.database().ref("players/" + id + "/table").set(tableId);
@@ -83,14 +84,13 @@ function takeDataFromLocalStorage(key = "tableData"){
 }
 function findPlayerInDB() {
 
-    let tableName = "-LatciE9_4znrhcvYR3G";
-    // let tableName = JSON.parse(localStorage.getItem('userData')).tableId;
-    let readData = firebase.database().ref('tables/');
-
+    let tableName = "NIEKASOWAC";
+    // let tableNames = JSON.parse(localStorage.getItem('userData'));
+    // console.log(tableNames.tableId + "<<<<<<local storage!!!")
     let table;
     return firebase.database().ref('/tables/' + tableName).once('value').then(function(snapshot) {
         table = snapshot.val();
-        console.log(table);
+        console.log(table+"<<<<<<table name");
         return table;
     });
 }
@@ -103,13 +103,17 @@ function assignOpponentToObject(){
     return table.then(function (table) {
         let dataFromLS = {player:'player1', weapon:""};
         console.log("assing opponent " + table);
+        let keys = Object.keys(table);
 
         if(dataFromLS['player'] === 'player1'){
             opponent['name'] = table['player2'];
             opponent['weapon'] = table['sign2'];
+            opponent['scoreKey'] = keys[3];
         }else{
             opponent['name'] = table['player1'];
             opponent['weapon'] = table['sign1'];
+            opponent['scoreKey'] = keys[2];
+
         }
         return opponent;
     })
@@ -122,14 +126,19 @@ function assignGamePlayerToObject() {
         let objectGamePlayer = {};
         // let dataFromLS = takeDataFromLocalStorage();
         let dataFromLS = {player:'player1'};
-        console.log("assing opponent " + playerFromDB);
+        console.log("assing player " + playerFromDB);
+        let keys = Object.keys(table);
 
         if(dataFromLS['player'] === 'player1'){
             objectGamePlayer['name'] = playerFromDB['player1'];
             objectGamePlayer['weapon'] = playerFromDB['sign1'];
+            objectGamePlayer['scoreKey'] = keys[2];
+
         }else{
             objectGamePlayer['name'] = playerFromDB['player2'];
             objectGamePlayer['weapon'] = playerFromDB['sign2'];
+            objectGamePlayer['scoreKey'] = keys[3];
+
         }
         return objectGamePlayer;
     });
@@ -152,51 +161,57 @@ function battleDecision(gamePlayer, opponent){
     console.log(opponent);
     if(gamePlayer['weapon']==='scissors' && opponent['weapon']==='rock'){
         console.log(opponent['name'] + " win!");
-        sendScoreToDB(opponent['name'], 1);
+        sendScoreToDB(opponent['name'], opponent['scoreKey']);
     }else if(gamePlayer['weapon']==='scissors' && opponent['weapon']==='paper'){
         console.log("You WIN!");
-        sendScoreToDB(gamePlayer["name"], 1);
+        sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
     }else if(gamePlayer['weapon']==='paper' && opponent['weapon']==='scissors'){
         console.log(opponent['name'] + " win!");
-        sendScoreToDB(opponent['name'], 1);
+        sendScoreToDB(opponent['name'], opponent['scoreKey']);
     }else if(gamePlayer['weapon']==='paper' && opponent['weapon']==='rock'){
         console.log("You WIN!");
-        sendScoreToDB(gamePlayer["name"], 1);
+        sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
     }else if(gamePlayer['weapon']==='rock' && opponent['weapon']==='paper'){
         console.log(opponent['name'] + " win!");
-        sendScoreToDB(opponent['name'], 1);
+        sendScoreToDB(opponent['name'], opponent['scoreKey']);
     }else if(gamePlayer['weapon']==='rock' && opponent['weapon']==='scissors'){
         console.log("You WIN!");
-        sendScoreToDB(gamePlayer["name"], 1);
+        sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
     }else if(gamePlayer['weapon']===opponent['weapon']){
         console.log("REMIS");
 
     }else if(gamePlayer['weapon']==='trash'){
         console.log(opponent['name'] + " win!");
-        sendScoreToDB(opponent['name'], 1);
+        sendScoreToDB(opponent['name'], opponent['scoreKey']);
     }else if(opponent['weapon']==='scissors'){
         console.log("You WIN!");
-        sendScoreToDB(gamePlayer["name"], 1);
+        sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
     }
 
 }
 
 
 
-function sendScoreToDB(playerName='Mareusz', scores=1) {
+function sendScoreToDB(playerName, scoreKey) {
+    let tableName = "NIEKASOWAC";
+    // let tableName = JSON.parse(localStorage.getItem('userData')).tableId;
     let update = {};
-    checkPlayerScore().then(function (prom) {
-        console.log(prom);
-        update['players/' + playerName] = {'score': prom+scores};
-        firebase.database().ref().update(update);
+    checkPlayerScore(playerName, tableName,scoreKey).then(function (prom) {
+        console.log(prom + "<<<<<score");
+        let newScore = prom+1;
+        update['tables/' + tableName] = {scoreKey: prom+1};
+        // firebase.database().ref().update(update);
+        let dirToScoreKey = "tables/"+tableName+"/"+scoreKey;
+        firebase.database().ref(dirToScoreKey).set(newScore);
+
     });
 }
 
-function checkPlayerScore(playerName="Mareusz") {
-    return firebase.database().ref("players/" + playerName).once("value").then(function (snap) {
+function checkPlayerScore(playerName="Mareusz", tableName, scoreKey) {
+    return firebase.database().ref("tables/" + tableName).once("value").then(function (snap) {
         return (snap.val())
     }).then(function (obj) {
-        return obj["score"];
+        return obj[scoreKey];
     });
 
 }
