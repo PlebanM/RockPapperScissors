@@ -64,7 +64,7 @@ function saveTableInfoToLocal(tableId, player) {
     localStorage.setItem("tableData", JSON.stringify({"tableId":tableId, "player":player}));
 }
 
-getAvailableTable(getSeat);
+// getAvailableTable(getSeat);
 
 
 //              RESOLVE BATTLE
@@ -207,7 +207,7 @@ function sendScoreToDB(playerName, scoreKey) {
     });
 }
 
-function checkPlayerScore(playerName="Mareusz", tableName, scoreKey) {
+function checkPlayerScore(playerName, tableName, scoreKey) {
     return firebase.database().ref("tables/" + tableName).once("value").then(function (snap) {
         return (snap.val())
     }).then(function (obj) {
