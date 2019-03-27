@@ -12,7 +12,7 @@ readData.on('value', function (snap) {
 
 function addActualPlayer(login) {
     let update = {};
-    update['players/'+ login] = {'score': 0, 'table':'uashdiuhasduuuu'};
+    update['players/'+ login] = {'score': 0};
     return firebase.database().ref().update(update);
 }
 
