@@ -34,7 +34,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="endGameModalLabel">You win</h5>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="endGameModalBody">
                 <h6>Congratulations, you win the match!</h6>
             </div>
             <div class="modal-footer">
@@ -44,10 +44,10 @@
                     </div>
                     <div class="row justify-content-around">
                         <div class="col-4 text-center">
-                            <button type="button" class="btn btn-primary continue-playing" data-dismiss="modal">YES!</button>
+                            <button id="continue-playing" type="button" class="btn btn-primary" data-dismiss="modal">YES!</button>
                         </div>
                         <div class="col-4 text-center">
-                            <button type="button" class="btn btn-primary stop-playing" data-dismiss="modal">NO :(</button>
+                            <button id="stop-playing" type="button" class="btn btn-primary" data-dismiss="modal">NO :(</button>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,8 @@
     };
     firebase.initializeApp(config);
 </script>
-<!--<script type="text/javascript" src="scripts/main.js"></script>-->
-<!--<script src="scripts/GamePreparation.js"></script>-->
-<!--<script src="scripts/SendChoice.js"></script>-->
+<script src="scripts/GameFinale.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+<script src="scripts/GamePreparation.js"></script>
+<script src="scripts/SendChoice.js"></script>
 </html>

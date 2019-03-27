@@ -14,6 +14,7 @@ function getSeat(tableId, isSecondPlayer) {
         }
     );
     saveTableInfoToLocal(tableId, tablePlayer);
+    setGameFinishListener();
 }
 
 function getAvailableTable(getSeat) {
