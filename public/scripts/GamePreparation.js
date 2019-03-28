@@ -1,6 +1,6 @@
 let timerId;
 let clearTimeoutId;
-
+document.getElementById("showWelcomeText").addEventListener('load', showUserName);
 function getSeat(tableId, isSecondPlayer) {
     let id = JSON.parse(localStorage.getItem("userData"))["name"];
     firebase.database().ref("players/" + id + "/table").set(tableId);
@@ -157,8 +157,8 @@ function battle() {
         opponent.then(function (opponent) {
             console.log(opponent);
             console.log(gamePlayer);
-            battleDecision(gamePlayer,opponent);
-            returnToChooseState();
+
+            returnToChooseState(battleDecision(gamePlayer,opponent));
             // decideGameStart();
         });
     })
@@ -166,48 +166,46 @@ function battle() {
 function battleDecision(gamePlayer, opponent){
     console.log("opp2: " + opponent.weapon);
     console.log("YOU2: " + gamePlayer.weapon);
+    let gameObject;
     if(gamePlayer['weapon']==='scissors' && opponent['weapon']==='rock'){
         console.log(opponent['name'] + " win!");
         sendScoreToDB(opponent['name'], opponent['scoreKey']);
-        showResult(new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon));
+        gameObject = new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon);
     }else if(gamePlayer['weapon']==='scissors' && opponent['weapon']==='paper'){
         console.log("You WIN!");
-        showResult(new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon));
+        gameObject = new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon);
         sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
     }else if(gamePlayer['weapon']==='paper' && opponent['weapon']==='scissors'){
         console.log(opponent['name'] + " win!");
-        showResult(new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon));
+        gameObject = new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon);
         sendScoreToDB(opponent['name'], opponent['scoreKey']);
     }else if(gamePlayer['weapon']==='paper' && opponent['weapon']==='rock'){
         console.log("You WIN!");
-        showResult(new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon));
+        gameObject = new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon);
         sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
     }else if(gamePlayer['weapon']==='rock' && opponent['weapon']==='paper'){
         console.log(opponent['name'] + " win!");
-        showResult(new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon));
+        gameObject = new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon);
         sendScoreToDB(opponent['name'], opponent['scoreKey']);
     }else if(gamePlayer['weapon']==='rock' && opponent['weapon']==='scissors') {
         console.log("You WIN!");
         sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
-        showResult(new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon));
-
-    }else if (gamePlayer['weapon']==="trash" && opponent['weapon']==="trash"){
-        sendScoreToDB(opponent["name"], opponent['scoreKey']);
-        sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
-
-    }else if(gamePlayer['weapon']===opponent['weapon']){
-        showResult(new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon));
-        console.log("REMIS");
-    }else if(gamePlayer['weapon']==='trash'){
-        console.log(opponent['name'] + " win!TRASH");
+        gameObject = new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon);
+    }else if(gamePlayer['weapon']===opponent['weapon'] && gamePlayer['weapon']!=='trash'){
+        gameObject = new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon);
+    }else if(gamePlayer['weapon']===opponent['weapon'] && gamePlayer['weapon']==='trash'){
         sendScoreToDB(opponent['name'], opponent['scoreKey']);
-        showResult(new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon));
-    }else if(opponent['weapon']==='trash'){
-        console.log("You WIN!TRASH");
         sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
+        gameObject = new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon);
+    }else if(gamePlayer['weapon']==='trash'){
+        sendScoreToDB(opponent['name'], opponent['scoreKey']);
+        gameObject = new GameResult(opponent.name, opponent.weapon, gamePlayer.name, gamePlayer.weapon);
+    }else if(opponent['weapon']==='trash'){
+        sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
+        gameObject = new GameResult(gamePlayer.name, gamePlayer.weapon, opponent.name, opponent.weapon);
     }
+    return gameObject;
 }
-
 
 
 class GameResult{
@@ -245,6 +243,7 @@ function checkPlayerScore(playerName, tableName, scoreKey) {
 //              Choose Weapon
 
 function startCountdown() {
+    document.getElementById("VS").style.display="none";
 
     let player = JSON.parse(localStorage.getItem('userData'));
     player["weapon"] = "trash";
@@ -287,11 +286,14 @@ function decideBattleStart(snap) {
     }
 }
 
-function returnToChooseState() {
+function returnToChooseState(gameObject) {
     let tableId = JSON.parse(localStorage.getItem("tableData")).tableId;
     //here goes setting up battle result function
+    showWinningPage(gameObject);
     clearTimeoutId = setTimeout(function () {
         //here goes clearing battle result function
+       clearWinningPage();
+
         if (!($("#endGameModal").data('bs.modal') || {})._isShown) {
             clearChoices()
                 .then(startCountdown())
@@ -308,30 +310,44 @@ function createLinkToPicture(weaponName){
 
 }
 
-function showResult(gameObject){
+function showWinningPage(gameObject){
+
     console.log(createLinkToPicture(gameObject.looserWeapon) + "<----winnerWeapon");
+
     let playerName = JSON.parse(localStorage.getItem('userData')).name;
+    if (gameObject.winnerWeapon === gameObject.looserWeapon && gameObject.winnerWeapon!=='trash'){
+        document.getElementById("playerName").innerHTML = `<div>DRAW!</div><img class = 'resposiveImg'  src=${createLinkToPicture(gameObject.winnerWeapon)} />`;
+        document.getElementById("opponentName").innerHTML = `<div>DRAW! </div><img class = 'resposiveImg' src=${createLinkToPicture(gameObject.looserWeapon)} />`;
 
-    if (playerName == gameObject.winnerName) {
-        document.getElementById("playerWeaponImage").innerHTML += `<img src=${createLinkToPicture(gameObject.winnerWeapon)} />`;
-        document.getElementById("opponentWeaponImage").innerHTML += `<img src=${createLinkToPicture(gameObject.looserWeapon)} />`;
-        document.getElementById("playerName").innerText = "YOU WIN!";
-        document.getElementById("opponentName").innerHTML = gameObject.looserName + " LOOSE!";
-
+    }else if (gameObject.winnerWeapon === gameObject.looserWeapon && gameObject.winnerWeapon==='trash'){
+        document.getElementById("playerName").innerHTML = `<div>DRAW! TRASH</div><img class = 'resposiveImg'  src=${createLinkToPicture(gameObject.winnerWeapon)} />`;
+        document.getElementById("opponentName").innerHTML = `<div>DRAW! TRASH</div><img class = 'resposiveImg' src=${createLinkToPicture(gameObject.looserWeapon)} />`;
+    }else if (playerName == gameObject.winnerName) {
+        document.getElementById("playerName").innerHTML = `<div>YOU WIN!</div><img class = 'resposiveImg'  src=${createLinkToPicture(gameObject.winnerWeapon)} />`;
+        document.getElementById("opponentName").innerHTML = `<div>${gameObject.looserName} LOOSE! </div><img class = 'resposiveImg' src=${createLinkToPicture(gameObject.looserWeapon)} />`;
+        document.getElementById("VS").style.display="flex";
     } else{
-        document.getElementById("opponentWeaponImage").innerHTML +=`<img src=${createLinkToPicture(gameObject.winnerWeapon)} />`;
-        document.getElementById("playerWeaponImage").innerHTML +=  `<img src=${createLinkToPicture(gameObject.looserWeapon)} />`;
-        document.getElementById("playerName").innerText = "YOU LOOSE!";
-        document.getElementById("opponentName").innerHTML = gameObject.winnerName + " WIN!";
+        document.getElementById("playerName").innerHTML = `<div>YOU LOOSE!</div> <img class = 'resposiveImg' src=${createLinkToPicture(gameObject.looserWeapon)} />`;
+        document.getElementById("opponentName").innerHTML = `<div>${gameObject.winnerName} WIN!</div><img class = 'resposiveImg' src=${createLinkToPicture(gameObject.winnerWeapon)} />`;
+        document.getElementById("VS").style.display="flex"  ;
 
     }
 
-
-
-
+    // clearGameResult();
     ///TODO: dla remisu jeszcze dorobic
 
+}
 
-
+function clearWinningPage(){
+    document.getElementById("playerName").innerHTML = "";
+    document.getElementById("opponentName").innerHTML = "";
+    document.getElementById("VS").style.display="none";
+    // let element = document.getElementById("opponentWeaponImage");
+    // element.parentNode.removeChild(element);
+    // let element2 = document.getElementById("playerWeaponImage");
+    // element2.parentNode.removeChild(element2);
+    // document.getElementById("winnerInfo").innerText = "";
+    // document.getElementById("looserInfo").innerText = "";
 
 }
+
