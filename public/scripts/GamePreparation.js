@@ -54,6 +54,7 @@ function decideGameStart(snap) {
     if (table.hasOwnProperty("player1") && table.hasOwnProperty("player2")) {
         console.log("im in if");
         $("#exampleModal").modal("hide");
+        startCountdown();
         //start the game
         firebase.database().ref("tables/" + snap.key).off("value", decideGameStart);
     }
@@ -64,7 +65,7 @@ function saveTableInfoToLocal(tableId, player) {
     localStorage.setItem("tableData", JSON.stringify({"tableId":tableId, "player":player}));
 }
 
-// getAvailableTable(getSeat);
+getAvailableTable(getSeat);
 
 
 //              RESOLVE BATTLE
@@ -215,6 +216,37 @@ function checkPlayerScore(playerName, tableName, scoreKey) {
     });
 
 }
+//player(player1 lub player2); tableId(jhsdakjsd)
 
 //              END RESOLVE BATTLE
-//player(player1 lub player2); tableId(jhsdakjsd)
+
+//              Choose Weapon
+
+function startCountdown() {
+
+    let player = JSON.parse(localStorage.getItem('userData'));
+    player["weapon"]="trash";
+    localStorage.setItem('userData', JSON.stringify(player));
+
+    let weapons = document.getElementById("weapons");
+    weapons.style.display="flex";
+    let timeLeft = 10;
+    let downloadTimer = setInterval(function(){
+        document.getElementById("countdown").innerHTML = timeLeft + " seconds remaining";
+        timeLeft -= 1;
+        if(timeLeft <= 0){
+            clearInterval(downloadTimer);
+            document.getElementById("countdown").innerHTML = "";
+            weapons.style.display="none";
+
+            if(JSON.parse(localStorage.getItem('userData')).weapon==="trash"){
+                addWeapon();
+            }
+            //add "trash" weapon when time end
+//here we initialize game, and show who win and what weapon choose opponent(and his name).
+            //Next we start another game or end game(with score). Ask if player want play again.
+            //change to make this for smartphone
+
+        }
+    }, 1000);
+}

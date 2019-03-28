@@ -11,14 +11,15 @@
 <body onload="battle()">
 
 <!-- Modal -->
-<div class="modal fade" data-backdrop="static" data-keyboard="false" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="exampleModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Connecting to the Table</h5>
             </div>
             <div class="modal-body">
-                After
+                When You join to the table, you have 10 sec to choose a weapon.
             </div>
             <div class="modal-footer">
 
@@ -30,34 +31,27 @@
 <h2 id="showWelcomeText">Witaj </h2>
 
 
+<div id="countdown"></div>
 <div id="weapons">
-<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div class="hovereffect">
-        <img class="img-responsive weapon-photo" src="assets/pictures/papper.png" alt="">
-        <div class="overlay">
-            <h2>PAPER</h2>
-            <a class="info" onclick="addWeapon('paper')">Choose this</a>
-        </div>
+        <img class="img-responsive weapon-photo" width="350" height="280" src="assets/pictures/papper.png" alt="paper" onclick="addWeapon('paper')">
+<!--        <div class="overlay">-->
+<!--            <h2>PAPER</h2>-->
+<!--            <a class="info" onclick="addWeapon('paper')">Choose this</a>-->
+<!--        </div>-->
     </div>
 </div>
 
-<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div class="hovereffect">
-        <img class="img-responsive weapon-photo" src="assets/pictures/rock.png" alt="">
-        <div class="overlay">
-            <h2>ROCK</h2>
-            <a class="info" onclick="addWeapon('rock')">Choose this</a>
-        </div>
+        <img class="img-responsive weapon-photo"  width="350" height="280" src="assets/pictures/rock.png" alt="rock" onclick="addWeapon('rock')">
     </div>
 </div>
 
-<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div class="hovereffect">
-        <img class="img-responsive weapon-photo" src="assets/pictures/scissors.png" alt="">
-        <div class="overlay">
-            <h2>SCISSORS</h2>
-            <a class="info" onclick="addWeapon('scissors')">Choose this</a>
-        </div>
+        <img class="img-responsive weapon-photo" width="350" height="280" src="assets/pictures/scissors.png" alt="scissors" onclick="addWeapon('scissors')">
     </div>
 </div>
 </div>
