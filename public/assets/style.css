@@ -311,3 +311,32 @@ input[type=text]:placeholder {
     margin-top: 30px;
     font-size: 36px;
 }
+
+/***************************************************/
+/*                     Battle result               */
+/***************************************************/
+
+#gameResult{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+#VS{
+    font-size: 40px;
+}
+
+#winnerInfo{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+#looserInfo{
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-around;
+    align-items: baseline;
+}
