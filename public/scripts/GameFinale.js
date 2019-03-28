@@ -8,6 +8,7 @@ function handleGameEnd(snap) {
     let table = snap.val();
     let playerType = JSON.parse(localStorage.getItem("tableData")).player;
     if (table.score1 === 3 || table.score2 === 3){
+        clearInterval(timerId);
         firebase.database().ref("tables/" + snap.key).off("value", handleGameEnd);
         let isWinner = true;
         if (table.score1 === 3) {
@@ -80,4 +81,8 @@ function removePlayerData() {
         localStorage.removeItem("userData");
         console.log("player deleted");
     })
+}
+
+function stopCheckingForBattle() {
+
 }

@@ -1,4 +1,4 @@
-
+let timerId;
 
 function getSeat(tableId, isSecondPlayer) {
     let id = JSON.parse(localStorage.getItem("userData"))["name"];
@@ -157,6 +157,8 @@ function battle() {
             console.log(opponent);
             console.log(gamePlayer);
             battleDecision(gamePlayer,opponent);
+            returnToChooseState();
+            // decideGameStart();
         });
     })
 }
@@ -202,10 +204,10 @@ function battleDecision(gamePlayer, opponent){
     }else if(opponent['weapon']==='trash'){
         console.log("You WIN!TRASH");
         sendScoreToDB(gamePlayer["name"], gamePlayer['scoreKey']);
-
     }
-
 }
+
+
 
 class GameResult{
     constructor (winnerName,  winnerWeapon, looserName, looserWeapon){
@@ -244,28 +246,29 @@ function checkPlayerScore(playerName, tableName, scoreKey) {
 function startCountdown() {
 
     let player = JSON.parse(localStorage.getItem('userData'));
-    player["weapon"]="trash";
+    player["weapon"] = "trash";
     localStorage.setItem('userData', JSON.stringify(player));
 
     let weapons = document.getElementById("weapons");
-    weapons.style.display="flex";
+    weapons.style.display = "flex";
     let timeLeft = 10;
-    let downloadTimer = setInterval(function(){
-        document.getElementById("countdown").innerHTML = timeLeft + " seconds remaining";
+    timerId = setInterval(function () {
+        let countdown = document.getElementById("countdown");
+        countdown.innerHTML = timeLeft + " seconds remaining";
+        countdown.style.display = "block";
         timeLeft -= 1;
-        if(timeLeft <= 0){
-            clearInterval(downloadTimer);
+        if(timeLeft <= 0) {
+            clearInterval(timerId);
             document.getElementById("countdown").innerHTML = "";
-            weapons.style.display="none";
+            weapons.style.display = "none";
 
-            if(JSON.parse(localStorage.getItem('userData')).weapon==="trash"){
+            if (JSON.parse(localStorage.getItem('userData')).weapon === "trash") {
                 addWeapon();
             }
 
             //here we initialize game, and show who win and what weapon choose opponent(and his name).
             //Next we start another game or end game(with score). Ask if player want play again.
             //change to make this for smartphone  l: 53 GamePrep
-
         }
     }, 1000);
 }
@@ -281,6 +284,13 @@ function decideBattleStart(snap) {
         firebase.database().ref("tables/" + snap.key).off("value", decideBattleStart);
         battle();
     }
+}
+
+function returnToChooseState() {
+    let tableId = JSON.parse(localStorage.getItem("tableData")).tableId;
+    clearChoices()
+        .then(startCountdown())
+        .then(waitForTwoWeaponInDB(tableId));
 }
 
 //                  Who Win Battle

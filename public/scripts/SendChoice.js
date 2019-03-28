@@ -1,5 +1,7 @@
 
 function addWeapon(weapon="trash") {
+    console.log(timerId);
+    clearInterval(timerId);
     document.getElementById("countdown").style.display="none";
     document.getElementById("weapons").style.display="none";
 
