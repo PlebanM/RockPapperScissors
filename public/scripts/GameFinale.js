@@ -8,6 +8,7 @@ function handleGameEnd(snap) {
     let table = snap.val();
     let playerType = JSON.parse(localStorage.getItem("tableData")).player;
     if (table.score1 === 3 || table.score2 === 3){
+        firebase.database().ref("tables/" + snap.key).off("value", handleGameEnd);
         let isWinner = true;
         if (table.score1 === 3) {
             if (playerType === "player2") {
@@ -49,17 +50,34 @@ function showEndGameMessage(title, message) {
 }
 
 function prepareNewGame() {
+    removeTableData().then(function () {
+        window.location.href = window.location.href;
+    });
+}
+
+function returnToLoginPage() {
+    removeTableData()
+        .then(removePlayerData())
+        .then(function () {
+            window.location = "index.html";
+        });
+}
+
+function removeTableData() {
     let tableId = JSON.parse(localStorage.getItem("tableData")).tableId;
     let removePromise = firebase.database().ref("tables/" + tableId).remove();
-    removePromise.then(
-        function () {
+    return removePromise.then(function () {
             console.log("game end");
             localStorage.removeItem("tableData");
         }
     )
-
 }
 
-function returnToLoginPage() {
-
+function removePlayerData() {
+    let playerName = JSON.parse(localStorage.getItem("userData")).name;
+    let removePromise = firebase.database().ref("players/" + playerName).remove();
+    return removePromise.then(function () {
+        localStorage.removeItem("userData");
+        console.log("player deleted");
+    })
 }

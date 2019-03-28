@@ -8,13 +8,15 @@ function getSeat(tableId, isSecondPlayer) {
     } else {
         tablePlayer = "player1";
     }
-    firebase.database().ref("/tables/" + tableId + "/" + tablePlayer).set(id).then(
+    const promise = firebase.database().ref("/tables/" + tableId + "/" + tablePlayer).set(id).then(
         function () {
             waitForGameStart(tableId);
         }
     );
-    saveTableInfoToLocal(tableId, tablePlayer);
-    setGameFinishListener();
+    promise
+        .then(saveTableInfoToLocal(tableId, tablePlayer))
+        .then(setGameFinishListener());
+
 }
 
 function getAvailableTable(getSeat) {
