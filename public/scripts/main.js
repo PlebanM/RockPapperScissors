@@ -22,7 +22,7 @@ function checkIfPlayerExist(login){
     let isInDB = users.includes(login);
     console.log(users);
 
-    if (isInDB){
+    if (isInDB || login.length==0){
         document.getElementById("login").classList.add("form-control","is-invalid");
 
     }else {
@@ -31,6 +31,7 @@ function checkIfPlayerExist(login){
         addActualPlayer(login);
         window.location.href = "play.html";
         document.getElementById("redirectFromLogin").setAttribute('action', 'play.html');
+
     }
 
     }
@@ -42,9 +43,10 @@ function createPlayer(userName) {
         weapon: undefined
     };
     localStorage.setItem('userData', JSON.stringify(player));
+
 }
 
 function showUserName() {
     let storageData = JSON.parse(localStorage.getItem('userData'));
-    document.getElementById('showWelcomeText').innerHTML += storageData['name'];
+    document.getElementById('showWelcomeText').innerText += storageData['name'];
 }
