@@ -46,5 +46,5 @@ function createPlayer(userName) {
 
 function showUserName() {
     let storageData = JSON.parse(localStorage.getItem('userData'));
-    document.getElementById('showName').innerHTML += storageData['name'];
+    document.getElementById('showWelcomeText').innerHTML += storageData['name'];
 }
