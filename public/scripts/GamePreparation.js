@@ -1,4 +1,5 @@
 let timerId;
+let clearTimeoutId;
 
 function getSeat(tableId, isSecondPlayer) {
     let id = JSON.parse(localStorage.getItem("userData"))["name"];
@@ -288,9 +289,16 @@ function decideBattleStart(snap) {
 
 function returnToChooseState() {
     let tableId = JSON.parse(localStorage.getItem("tableData")).tableId;
-    clearChoices()
-        .then(startCountdown())
-        .then(waitForTwoWeaponInDB(tableId));
+    //here goes setting up battle result function
+    clearTimeoutId = setTimeout(function () {
+        //here goes clearing battle result function
+        if (!($("#endGameModal").data('bs.modal') || {})._isShown) {
+            clearChoices()
+                .then(startCountdown())
+                .then(waitForTwoWeaponInDB(tableId));
+        }
+    }, 3000);
+
 }
 
 //                  Who Win Battle

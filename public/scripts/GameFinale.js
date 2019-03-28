@@ -9,6 +9,7 @@ function handleGameEnd(snap) {
     let playerType = JSON.parse(localStorage.getItem("tableData")).player;
     if (table.score1 === 3 || table.score2 === 3){
         clearInterval(timerId);
+        clearTimeout(clearTimeoutId);
         firebase.database().ref("tables/" + snap.key).off("value", handleGameEnd);
         let isWinner = true;
         if (table.score1 === 3) {
