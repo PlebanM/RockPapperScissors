@@ -303,7 +303,7 @@ input[type=text]:placeholder {
 
 #weapons{
     display: none;
-
+   
 }
 
 
@@ -312,17 +312,29 @@ input[type=text]:placeholder {
     font-size: 36px;
 }
 
+@media only screen and (max-width: 400px) {
+    .weapon-photo{
+        width: 50%;
+        height: 50%;
+    }
+}
+
+@media only screen and (min-width: 400px) {
+    .weapon-photo{
+        width: 320px;
+        height: 280px;
+    }
+}
 /***************************************************/
 /*                     Battle result               */
 /***************************************************/
 
 #gameResult{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+display: flex;
+flex-direction: row;
+justify-content: space-around;
     align-items: baseline;
 }
-
 
 
 #VS{
@@ -354,10 +366,6 @@ input[type=text]:placeholder {
 
 }
 
-.weapon-photo{
-    width: 280px;
-    height: 200px;
-}
 
 .responsive{
     width: 100%;
