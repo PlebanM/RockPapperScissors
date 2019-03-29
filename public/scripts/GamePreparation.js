@@ -282,6 +282,7 @@ function returnToChooseState(gameObject) {
             clearChoices()
                 .then(startCountdown())
                 .then(waitForTwoWeaponInDB(tableId));
+            writeScoresToScreen();
         }
     }, 3000);
 
@@ -325,3 +326,26 @@ function clearWinningPage(){
 
 }
 
+function writeScoresToScreen() {
+    let table = JSON.parse(localStorage.getItem('tableData'));
+    if (table != null) {
+        let tableRef = firebase.database().ref("tables/" + table.tableId);
+        tableRef.once("value", function (snap) {
+            let databaseTable = snap.val();
+            let myScore;
+            let opponentScore;
+            if (table.player === "player1") {
+                myScore = databaseTable.score1;
+                opponentScore = databaseTable.score2;
+            } else {
+                myScore = databaseTable.score2;
+                opponentScore = databaseTable.score1;
+            }
+            setScoreHtml(myScore, opponentScore);
+        })
+    }
+}
+
+function setScoreHtml(myScore, opponentScore) {
+    $("#score").text(` ${myScore} vs ${opponentScore}`);
+}
