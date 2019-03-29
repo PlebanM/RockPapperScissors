@@ -8,7 +8,7 @@ readData.on('value', function (snap) {
     }
 }, function (error) {
     console.log("error " + error.code);
-})
+});
 
 
 function addActualPlayer(login) {

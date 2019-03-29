@@ -83,7 +83,3 @@ function removePlayerData() {
         console.log("player deleted");
     })
 }
-
-function stopCheckingForBattle() {
-
-}

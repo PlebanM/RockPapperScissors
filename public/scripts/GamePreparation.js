@@ -76,13 +76,6 @@ getAvailableTable(getSeat);
 //              RESOLVE BATTLE
 
 
-// let table = {"player1":"Name",
-//                 "player2":"Name2",
-//                 "score1" : 1,
-//                 "score2" : 2,
-//                 "sign1":"paper",
-//                 "sign2":"rock"
-// };
 
 function takeDataFromLocalStorage(key = "tableData"){
     let dataFromLS = JSON.parse(localStorage.getItem(key));
@@ -106,7 +99,6 @@ function assignOpponentToObject(){
     return playerFromDB.then(function (playerFromDB) {
         let opponent = {};
         let dataFromLS = takeDataFromLocalStorage();
-        // let dataFromLS = {player:'player1'};
         console.log("assing player " + playerFromDB);
         let keys = Object.keys(playerFromDB);
 
@@ -130,7 +122,6 @@ function assignGamePlayerToObject() {
     return playerFromDB.then(function (playerFromDB) {
         let objectGamePlayer = {};
         let dataFromLS = takeDataFromLocalStorage();
-        // let dataFromLS = {player:'player1'};
         console.log("assing player " + playerFromDB.player);
         let keys = Object.keys(playerFromDB);
 
@@ -159,7 +150,6 @@ function battle() {
             console.log(gamePlayer);
 
             returnToChooseState(battleDecision(gamePlayer,opponent));
-            // decideGameStart();
         });
     })
 }
@@ -236,11 +226,11 @@ function checkPlayerScore(playerName, tableName, scoreKey) {
     });
 
 }
-//player(player1 lub player2); tableId(jhsdakjsd)
 
 //              END RESOLVE BATTLE
 
-//              Choose Weapon
+
+//              CHOOSE WEAPON
 
 function startCountdown() {
     document.getElementById("VS").style.display="none";
@@ -265,10 +255,6 @@ function startCountdown() {
             if (JSON.parse(localStorage.getItem('userData')).weapon === "trash") {
                 addWeapon();
             }
-
-            //here we initialize game, and show who win and what weapon choose opponent(and his name).
-            //Next we start another game or end game(with score). Ask if player want play again.
-            //change to make this for smartphone  l: 53 GamePrep
         }
     }, 1000);
 }
@@ -288,10 +274,8 @@ function decideBattleStart(snap) {
 
 function returnToChooseState(gameObject) {
     let tableId = JSON.parse(localStorage.getItem("tableData")).tableId;
-    //here goes setting up battle result function
     showWinningPage(gameObject);
     clearTimeoutId = setTimeout(function () {
-        //here goes clearing battle result function
        clearWinningPage();
 
         if (!($("#endGameModal").data('bs.modal') || {})._isShown) {
@@ -330,11 +314,7 @@ function showWinningPage(gameObject){
         document.getElementById("playerName").innerHTML = `<div>YOU LOOSE!</div> <img class = 'resposiveImg' src=${createLinkToPicture(gameObject.looserWeapon)} />`;
         document.getElementById("opponentName").innerHTML = `<div>${gameObject.winnerName} WIN!</div><img class = 'resposiveImg' src=${createLinkToPicture(gameObject.winnerWeapon)} />`;
         document.getElementById("VS").style.display="flex"  ;
-
     }
-
-    // clearGameResult();
-    ///TODO: dla remisu jeszcze dorobic
 
 }
 
@@ -342,12 +322,6 @@ function clearWinningPage(){
     document.getElementById("playerName").innerHTML = "";
     document.getElementById("opponentName").innerHTML = "";
     document.getElementById("VS").style.display="none";
-    // let element = document.getElementById("opponentWeaponImage");
-    // element.parentNode.removeChild(element);
-    // let element2 = document.getElementById("playerWeaponImage");
-    // element2.parentNode.removeChild(element2);
-    // document.getElementById("winnerInfo").innerText = "";
-    // document.getElementById("looserInfo").innerText = "";
 
 }
 
