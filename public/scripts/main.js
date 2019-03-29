@@ -1,3 +1,5 @@
+window.onload = showUserName;
+
 let readData = firebase.database().ref('players/');
 var users = [];
 readData.on('value', function (snap) {
@@ -48,5 +50,5 @@ function createPlayer(userName) {
 
 function showUserName() {
     let storageData = JSON.parse(localStorage.getItem('userData'));
-    document.getElementById('showWelcomeText').innerText += storageData['name'];
+    document.getElementById('showWelcomeText').innerText += " " + storageData['name'];
 }
