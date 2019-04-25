@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" >
+</head>
+<body>
+
+<!-- Waiting for opponent -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="exampleModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Connecting to the Table</h5>
+            </div>
+            <div class="modal-body">
+                When You join to the table, you have 10 sec to choose a weapon.
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Win/Lose Message -->
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="endGameModal" tabindex="-1" role="dialog" aria-labelledby="endGameModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"  role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="endGameModalLabel">You win</h5>
+            </div>
+            <div class="modal-body" id="endGameModalBody">
+                <h6>Congratulations, you win the match!</h6>
+            </div>
+            <div class="modal-footer">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <p>Would you like to play again?</p>
+                    </div>
+                    <div class="row justify-content-around">
+                        <div class="col-4 text-center">
+                            <button id="continue-playing" type="button" class="btn btn-primary" data-dismiss="modal">YES!</button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button id="stop-playing" type="button" class="btn btn-primary" data-dismiss="modal">NO :(</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 id="showWelcomeText">Hello </h2>
+<h2 id="score"> </h2>
+
+<div id="countdown"></div>
+<div id="weapons">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="hovereffect">
+        <img class="img-responsive weapon-photo"  src="assets/pictures/paper.png" alt="paper" onclick="addWeapon('paper')">
+    </div>
+</div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="hovereffect">
+        <img class="img-responsive weapon-photo"  src="assets/pictures/rock.png" alt="rock" onclick="addWeapon('rock')">
+    </div>
+</div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div class="hovereffect">
+        <img class="img-responsive weapon-photo"  src="assets/pictures/scissors.png" alt="scissors" onclick="addWeapon('scissors')">
+    </div>
+</div>
+</div>
+
+<div id ="gameResult">
+    <div id="winnerInfo">
+        <div id="playerName" class="textInfo">
+        </div>
+    </div>
+
+    <div id="VS">VS</div>
+
+    <div id="looserInfo">
+        <div id="opponentName" class="textInfo">
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-functions.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyDWxD5f8WWb3qTuA4zkJ31M1jO4eePiUi0",
+        authDomain: "rockpaperscissors-85261.firebaseapp.com",
+        databaseURL: "https://rockpaperscissors-85261.firebaseio.com",
+        projectId: "rockpaperscissors-85261",
+        storageBucket: "",
+        messagingSenderId: "252852238385"
+    };
+    firebase.initializeApp(config);
+</script>
+<script src="scripts/BattleFinale.js"></script>
+<script src="scripts/GameFinale.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+<script src="scripts/GamePreparation.js"></script>
+<script src="scripts/SendChoice.js"></script>
+</html>
